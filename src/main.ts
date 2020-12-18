@@ -5,6 +5,7 @@ import ElementPuls from 'element-plus'
 import 'element-plus/lib/theme-chalk/index.css'
 import App from './App.vue'
 
+
 const app = createApp(App)
 app.use(ElementPuls).use(store).use(router).mount('#app')
 // createApp(App).use(store).use(router).mount('#app')

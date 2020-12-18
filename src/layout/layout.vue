@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <!-- 导航 -->
-    <el-aside width="auto">
+    <el-aside :width="asideWidth">
       <Nav :isCollapse="isCollapse"/>
     </el-aside>
     <!-- 右侧容器 -->
@@ -11,7 +11,9 @@
         <Header @switch-collapse="switchCollapse"/>
       </el-header>
       <!-- 内容 -->
-      <el-main>Main</el-main>
+      <el-main>
+        <router-view />
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -26,12 +28,13 @@ export default defineComponent ({
   data () {
     return {
       isCollapse: true,
-      asideWidth: "200px"
+      asideWidth: "auto"
     }
   },
   methods: {
     switchCollapse() {
       this.isCollapse = !this.isCollapse
+      // this.asideWidth = this.isCollapse ? 'auto' : '200px'
     }
   },
   components: {
