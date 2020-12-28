@@ -11,14 +11,14 @@ interface Imgs {
 export default defineComponent ({
   name: "lazyImage",
   setup (prop, context) {
-    let defaultName = require('../assets/lazy/default.png')
+    let defaultName = require('../../assets/lazy/default.png')
     let dataSrc = [
-      require('../assets/lazy/1.jpg'),
-      require('../assets/lazy/2.jpg'),
-      require('../assets/lazy/3.jpg'),
-      require('../assets/lazy/4.jpg'),
-      require('../assets/lazy/5.jpg'),
-      require('../assets/lazy/6.jpg'),
+      require('../../assets/lazy/1.jpg'),
+      require('../../assets/lazy/2.jpg'),
+      require('../../assets/lazy/3.jpg'),
+      require('../../assets/lazy/4.jpg'),
+      require('../../assets/lazy/5.jpg'),
+      require('../../assets/lazy/6.jpg'),
     ]
     onMounted(() => {
       lazyLoad()
@@ -27,13 +27,9 @@ export default defineComponent ({
       let viewHeight = document.body.clientHeight
       let imgs = document.querySelectorAll('img[data-src]')
       observe(imgs)
-      // for (let i = 0; i < imgs.length; i++) {
-      //   observe(imgs[i])
-      // }
     }
     let observe = (els: any) => {
       let io = new IntersectionObserver((entries) => {
-        console.log(entries)
         if (entries[0].isIntersecting) {
           const el = (entries[0].target as any)
           const realSrc = el.dataset.src

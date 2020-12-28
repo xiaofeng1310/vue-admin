@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <!-- 导航 -->
-    <el-aside :width="asideWidth">
+    <el-aside width="initial">
       <Nav :isCollapse="isCollapse"/>
     </el-aside>
     <!-- 右侧容器 -->
@@ -27,8 +27,7 @@ export default defineComponent ({
   name: "layout",
   data () {
     return {
-      isCollapse: true,
-      asideWidth: "auto"
+      isCollapse: true
     }
   },
   methods: {
@@ -65,7 +64,7 @@ export default defineComponent ({
 }
 
 .el-main {
-  background-color: #e9eef3;
+  background-color: #f0f2f5;
   color: #333;
   text-align: center;
   line-height: 160px;

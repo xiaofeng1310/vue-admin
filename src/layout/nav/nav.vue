@@ -3,8 +3,10 @@
     background-color="rgb(48, 65, 86)"
     text-color="rgb(191, 203, 217)"
     active-text-color="rgb(64, 158, 255)"
-    class="el-menu-vertical-demo"
     :collapse="isCollapse"
+    class="el-menu-vertical-demo"
+    @open="handleOpen"
+    @close="handleClose"
     >
     <template v-for="(item, index) in menu" :key="item">
       <!-- 没有子元素 -->
@@ -51,7 +53,7 @@ export default defineComponent ({
         },
         {
           icon: "el-icon-location",
-          name: "文档"
+          name: "图表"
         },
         {
           icon: "el-icon-location",
@@ -76,7 +78,21 @@ export default defineComponent ({
           icon: "el-icon-location",
           name: "组件"
         }
-      ]
+      ],
+      transition: true
+    }
+  },
+  mounted () {
+    // setTimeout(() => {
+    //   this.collapse = false
+    // }, 100000)
+  },
+  methods: {
+    handleOpen () {
+      console.log('hhh')
+    },
+    handleClose () {
+      console.log('close')
     }
   }
 })
@@ -88,6 +104,7 @@ export default defineComponent ({
 }
 .el-menu-vertical-demo {
   text-align: left;
+  height: 100vh;
 }
 .el-menu-item:hover, .el-submenu__title:hover {
   color: #f00;
@@ -98,5 +115,9 @@ export default defineComponent ({
 }
 .child-menu-item:hover {
   background-color: #001528 !important;
+}
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+  max-width: 200px;
 }
 </style>

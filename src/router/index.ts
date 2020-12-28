@@ -1,17 +1,22 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/layout.vue'
-import LazyImage from '@/views/lazyImage.vue'
+import LazyImage from '@/views/lazyImage/lazyImage.vue'
+import Charts from '@/views/charts/map-echarts.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
-    redirect: "/lazy",
+    redirect: "/charts",
     component: Layout,
     children: [
       {
         path: "lazy",
         component: LazyImage
+      },
+      {
+        path: "charts",
+        component: Charts
       }
     ]
   }
