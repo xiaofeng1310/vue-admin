@@ -11,20 +11,41 @@ import 'echarts/lib/chart/line'
 import 'echarts/lib/component/legend'
 import 'echarts/lib/component/axisPointer'
 import type { EChartsFullOption } from 'echarts/lib/option'
+const axios = require('axios')
+
+type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
+type ResponseType = 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream'
+
+
+interface Datas {
+  id: number,
+  price: number,
+  week: string
+}
+interface AxiosRequest {
+    baseURL?: string;
+    url: string;
+    data?: any;
+    params?: any;
+    method?: Method;
+    headers?: any;
+    timeout?: number;
+    responseType?: ResponseType;
+}
+
+interface Customers {
+  id: number,
+  name: string,
+  datas: Array<Datas>
+}
 
 export default defineComponent ({
   name: "echarts",
   setup () {
     const main = ref()
     let option: EChartsFullOption = {
-      title: {
-          text: '折线图堆叠'
-      },
       tooltip: {
           trigger: 'axis'
-      },
-      legend: {
-          data: ['邮件营销', '联盟广告']
       },
       grid: {
           left: '2%',
@@ -40,7 +61,7 @@ export default defineComponent ({
       xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data:['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
           axisLine: {
             lineStyle: {
               color: '#3188C8',
@@ -61,20 +82,6 @@ export default defineComponent ({
             }
           }
       },
-      series: [
-          {
-              name: '邮件营销',
-              type: 'line',
-              stack: '总量',
-              data: [23, 46, 21, 14, 90, 100, 80]
-          },
-          {
-              name: '联盟广告',
-              type: 'line',
-              stack: '总量',
-              data: [79, 90, 100, 50, 120, 150, 10]
-          }
-      ],
       axisPointer: {
         show: true,
         type: 'line',
@@ -84,10 +91,37 @@ export default defineComponent ({
         }
       }
     };
-    nextTick(() => {
-      let el: HTMLDivElement = main.value
-      let chart = echarts.init(el)
-      chart.setOption(option)
+    onMounted(() => {
+      axios.get('http://localhost:3000/customers').then((res: AxiosRequest) => {
+        let data:Array<Customers> = res.data
+        let legend:any = {}
+        let series:any = []
+        let legendData:Array<string> = []
+        data.forEach((value, index: number) => {
+          let seriesData:Array<number> = []
+          legendData.push(value.name)
+          value.datas.forEach(list => {
+            seriesData.push(list.price)
+          })
+          series.push({
+            type: "line",
+            data: seriesData,
+            name: value.name
+          })
+          option.series = series
+          option.legend = legend
+          console.log(option)
+        })
+        legend.data = legendData
+        nextTick(() => {
+          let el: HTMLDivElement = main.value
+          let chart = echarts.init(el)
+          chart.setOption(option)
+          window.addEventListener('resize', () => {
+            chart.resize()
+          })
+        })
+      })
     })
     return {
       main,
