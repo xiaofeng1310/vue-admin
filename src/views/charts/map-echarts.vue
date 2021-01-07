@@ -92,7 +92,7 @@ export default defineComponent ({
       }
     };
     onMounted(() => {
-      axios.get('http://localhost:3000/customers').then((res: AxiosRequest) => {
+      axios.get('/api').then((res: AxiosRequest) => {
         let data:Array<Customers> = res.data
         let legend:any = {}
         let series:any = []
@@ -110,7 +110,6 @@ export default defineComponent ({
           })
           option.series = series
           option.legend = legend
-          console.log(option)
         })
         legend.data = legendData
         nextTick(() => {

@@ -1,4 +1,3 @@
-const { fake } = require('faker')
 const faker = require('faker')
 function generateCustomers () {
   var customers = []
@@ -20,16 +19,8 @@ function generateCustomers () {
       "datas": datas
     })
   }
-  return { "customers": customers }
+  return customers
 }
-[
-  {
-    name: "name",
-    datas: [
-
-    ]
-  }
-]
 
 // 如果你要用json-server的话，就需要export这个生成fake data的function
-module.exports = generateCustomers
+module.exports = generateCustomers()
