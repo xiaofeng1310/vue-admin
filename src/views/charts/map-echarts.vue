@@ -1,16 +1,13 @@
 <template>
-  <div class="el-echarts" ref="main" />
+  <div class="el-echarts">
+    <EchartLine :dataList="servrs"/>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { ref, onMounted, nextTick } from 'vue'
-import echarts from 'echarts/lib/echarts'
-import 'echarts/lib/chart/bar'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/legend'
-import 'echarts/lib/component/axisPointer'
-import type { EChartsFullOption } from 'echarts/lib/option'
+import { ref, onMounted, nextTick, reactive } from 'vue'
+import EchartLine from '@/components/echart_line/echart_line.vue'
 const axios = require('axios')
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
@@ -42,90 +39,32 @@ interface Customers {
 export default defineComponent ({
   name: "echarts",
   setup () {
-    const main = ref()
-    let option: EChartsFullOption = {
-      tooltip: {
-          trigger: 'axis'
-      },
-      grid: {
-          left: '2%',
-          right: '2%',
-          bottom: '3%',
-          containLabel: true
-      },
-      toolbox: {
-          feature: {
-              saveAsImage: {}
-          }
-      },
-      xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data:['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          axisLine: {
-            lineStyle: {
-              color: '#3188C8',
-              width: 1
-            }
-          },
-          axisTick: {
-            show: false
-          }
-      },
-      yAxis: {
-          type: 'value',
-          axisLine: {
-            show: true,
-            lineStyle: {
-              color: '#3188C8',
-              width: 1
-            }
-          }
-      },
-      axisPointer: {
-        show: true,
-        type: 'line',
-        lineStyle: {
-          color: '#3188C8',
-          type: 'solid'
-        }
-      }
-    };
+    let servrs = ref()
     onMounted(() => {
       axios.get('/api').then((res: AxiosRequest) => {
-        let data:Array<Customers> = res.data
-        let legend:any = {}
-        let series:any = []
-        let legendData:Array<string> = []
-        data.forEach((value, index: number) => {
-          let seriesData:Array<number> = []
-          legendData.push(value.name)
-          value.datas.forEach(list => {
-            seriesData.push(list.price)
-          })
-          series.push({
-            type: "line",
-            data: seriesData,
-            name: value.name
-          })
-          option.series = series
-          option.legend = legend
-        })
-        legend.data = legendData
-        nextTick(() => {
-          let el: HTMLDivElement = main.value
-          let chart = echarts.init(el)
-          chart.setOption(option)
-          window.addEventListener('resize', () => {
-            chart.resize()
-          })
-        })
+        let data = getServeData(res.data)
+        servrs.value = data
       })
     })
-    return {
-      main,
-      option
+    function getServeData (data:Array<Customers>) {
+      let values = [], value = [], servers = []
+      for (let i = 0; i < data.length; i++) {
+        values = []
+        for (let j = 0; j < data[i].datas.length; j++) {
+          value = []
+          value.push(data[i].datas[j].week, data[i].datas[j].price)
+          values.push(value)
+        }
+        servers.push(values)
+      }
+      return servers
     }
+    return {
+      servrs
+    }
+  },
+  components: {
+    EchartLine
   }
 })
 </script>

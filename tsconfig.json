@@ -32,7 +32,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-, "server/faker/index.js"  ],
+, "server/faker/index.js", "src/components/echart_line/default_option.js"  ],
   "exclude": [
     "node_modules"
   ]
